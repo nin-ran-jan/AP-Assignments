@@ -29,6 +29,15 @@ public class Vaccine {
         }
     }
 
+    public static Vaccine getVaccine(String vaccineName){
+        for (Vaccine curVac : vaccines){
+            if (curVac._name.equals(vaccineName)){
+                return curVac;
+            }
+        }
+        return null;
+    }
+
     public String getName(){
         return this._name;
     }

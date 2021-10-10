@@ -44,7 +44,10 @@ public class Citizen {
                     curCit._vac = vac;
                     curCit._vacCount += 1;
                     curCit._vacDay = chosenSlot.getDayNum();
-                    chosenSlot.quantNegate();
+                    if(chosenSlot.quantNegate() == -1){
+                        chosenSlot.quantAdd();
+                        return;
+                    }
                     if (vac.getDoseNumber() == 1){
                         curCit._vaccinationStatus = "FULLY VACCINATED";
                     }
@@ -55,21 +58,18 @@ public class Citizen {
 
                 }
                 else if (curCit._vaccinationStatus.equals("PARTIALLY VACCINATED")){
-                    if (chosenSlot.getDayNum() - curCit._vacDay < vac.getDoseGap()){
-                        System.out.println("ERROR! You need to wait a bit more for your turn.\n---------------------------------");
+                    curCit._vacCount += 1;
+                    curCit._vacDay = chosenSlot.getDayNum();
+                    if(chosenSlot.quantNegate() == -1){
+                        chosenSlot.quantAdd();
                         return;
                     }
-                    else{
-                        curCit._vacCount += 1;
-                        curCit._vacDay = chosenSlot.getDayNum();
-                        chosenSlot.quantNegate();
-                        if(vac.getDoseNumber() == curCit._vacCount){
-                            curCit._vaccinationStatus = "FULLY VACCINATED";
-                        }
-                        else{
-                            curCit._vaccinationStatus = "PARTIALLY VACCINATED";
-                        }  
+                    if(vac.getDoseNumber() == curCit._vacCount){
+                        curCit._vaccinationStatus = "FULLY VACCINATED";
                     }
+                    else{
+                        curCit._vaccinationStatus = "PARTIALLY VACCINATED";
+                    }  
                     System.out.println(curCit._name+" vaccinated with "+vac.getName()+"\n---------------------------------");
                 }
                 else{
@@ -80,6 +80,25 @@ public class Citizen {
             }
         }
 
+    }
+
+    public static void vacStatus(long uID){
+        for (Citizen cur : citizens){
+            if (cur._uniqueID == uID){
+                System.out.println(cur._vaccinationStatus);
+                if (!cur._vaccinationStatus.equals("REGISTERED")){
+                    System.out.println("Vaccine given "+cur._vac.getName());
+                }
+                System.out.println("Number of doses given: "+cur._vacCount);
+                if (cur._vaccinationStatus.equals("PARTIALLY VACCINATED")){
+                    int x = cur._vacDay+cur._vac.getDoseGap();
+                    System.out.println("Next Dose due date: "+x);     
+                }
+                System.out.println("---------------------------------");
+                return;
+            }
+        }
+        System.out.println("ERROR! Could not find patient ID in database.\n---------------------------------");
     }
 
 
@@ -107,6 +126,15 @@ public class Citizen {
         citizens.add(c);        
         System.out.println("Citizen Name: "+name+", Age: "+c._age+", Unique ID: "+uniqueID+"\n---------------------------------");
         return;
+    }
+
+    public static int getVacDay(long uID){
+        for (Citizen curCit : citizens){
+            if (curCit._uniqueID == uID){
+                return curCit._vacDay;
+            }
+        }
+        return 0;
     }
 
     public static boolean checkID(long uID){

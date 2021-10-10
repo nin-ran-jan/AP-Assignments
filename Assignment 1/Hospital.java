@@ -28,6 +28,14 @@ public class Hospital {
         return null;
     }
 
+    public int getUID(){
+        return this._uniqueID;
+    }
+
+    public String getName(){
+        return this._name;
+    }
+
     public static boolean displayHospitals(int pincode){
         if (hospitals.size() == 0){
             System.out.println("ERROR! Register a hospital first.\n---------------------------------");
@@ -45,6 +53,7 @@ public class Hospital {
         }
         return flag;
     }
+
 
     public static void register(String name, int pinCode){
         

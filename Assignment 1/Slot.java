@@ -18,7 +18,7 @@ public class Slot {
         slots = new LinkedList<Slot>();
     }
 
-    public static LinkedList <Integer> displaySlots(int hospID, boolean flag, long uID){
+    public static LinkedList <Integer> displaySlots(int hospID, boolean flag, long uID, int option, String vaccineName){
         LinkedList <Integer> countArr = new LinkedList<Integer>();
 
         if (!flag){
@@ -32,28 +32,58 @@ public class Slot {
             return countArr;
         }
 
-        Vaccine vac = Citizen.getVaccine(uID);
+        Vaccine vac;
+
+        if (vaccineName.equals("0")){
+            vac = Citizen.getVaccine(uID);
+        }
+
+        else{
+            vac = Vaccine.getVaccine(vaccineName);
+        }
+                
 
         int count = 0;
-        for (Slot curSlot : slots){
-            if (curSlot._hosp == hosp && vac == null || curSlot._hosp == hosp && curSlot._vac == vac){
-                countArr.add(count);
-                System.out.println(count+"-> Day: "+curSlot._dayNum+" Available Qty: "+curSlot._quant+" Vaccine: "+curSlot._vac.getName());
+        if (option == 1 || vac == null){
+            for (Slot curSlot : slots){
+                if (curSlot._hosp == hosp && vac == null || curSlot._hosp == hosp && curSlot._vac == vac && Citizen.getVacDay(uID)+vac.getDoseGap() <= curSlot._dayNum){
+                    countArr.add(count);
+                    System.out.println(count+"-> Day: "+curSlot._dayNum+" Available Qty: "+curSlot._quant+" Vaccine: "+curSlot._vac.getName());
+                }
+                count++;
             }
-            count++;
         }
+        else if (option == 2){
+            for (Slot curSlot : slots){
+                if (curSlot._hosp == hosp && curSlot._vac == vac && (Citizen.getVacDay(uID)+vac.getDoseGap() <= curSlot._dayNum || Citizen.getVacDay(uID) == 0)){
+                    countArr.add(count);
+                    System.out.println(count+"-> Day: "+curSlot._dayNum+" Available Qty: "+curSlot._quant+" Vaccine: "+curSlot._vac.getName());
+                }
+                count++;
+            }
+        }
+        
         if (countArr.size() == 0){
             System.out.println("Sorry! There weren't any slots available.\n---------------------------------");
         }
         return countArr;
     }
+    
 
     public int getDayNum(){
         return this._dayNum;
     }
 
-    public void quantNegate(){
+    public int quantNegate(){
+        if (this._quant == 0){
+            System.out.println("ERROR! Cannot use this vaccine, as quantity is 0.\n---------------------------------");
+        }
         this._quant -= 1;
+        return this._quant;
+    }
+
+    public void quantAdd(){
+        this._quant++;
     }
 
     public static Slot getSlot(int option, LinkedList <Integer> checkArr){
@@ -62,6 +92,28 @@ public class Slot {
 
     public Vaccine getVaccine(){
         return this._vac;
+    }
+
+    public static boolean displayHospitals(String vaccineName){
+        if (slots.size() == 0){
+            System.out.println("ERROR! Create a slot first.\n---------------------------------");
+            return false;
+        }
+
+        LinkedList <Hospital> checker = new LinkedList<Hospital>();
+
+        boolean flag = false;
+        for (Slot curSlot : slots){
+            if (curSlot._vac.getName().equals(vaccineName) && !checker.contains(curSlot._hosp)){
+                flag = true;
+                checker.add(curSlot._hosp);
+                System.out.println(curSlot._hosp.getUID()+" "+curSlot._hosp.getName());
+            }
+        }
+        if (!flag){
+            System.out.println("Sorry! There aren't any slots at the moment.\n---------------------------------");
+        }
+        return flag;
     }
 
     public static void createSlots(int enteredID, int dayNum, int quant, int vacChoice, Hospital hosp){

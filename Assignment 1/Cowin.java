@@ -108,33 +108,44 @@ public class Cowin {
                     System.out.print("1. Search by area\n2. Search by Vaccine\n3. Exit\nEnter option: ");
                     int option = sc.nextInt();
 
+                    String vaccineName = "0";
+
                     if (option == 1){
                         System.out.print("Enter PinCode: ");
                         int pincode = sc.nextInt();
                         if (!Hospital.displayHospitals(pincode)){
                             break;
                         }
-                        System.out.print("Enter Hospital ID: ");
-                        int hospID = sc.nextInt();
-                        LinkedList <Integer> checkArr = Slot.displaySlots(hospID, Citizen.checkID(uID), uID);
-                        if (checkArr.size() == 0){
+                    }
+
+                    else if(option == 2){
+                        Scanner scan = new Scanner(System.in);
+                        System.out.print("Enter Vaccine name: ");
+                        vaccineName = scan.nextLine();
+                        if (!Slot.displayHospitals(vaccineName)){
                             break;
                         }
-                        System.out.print("Choose Slot: ");
-                        option = sc.nextInt();
-                        Citizen.bookSlot(uID, option, checkArr);
                     }
-                    else if(option == 2){
-                        
-                    }
+
                     else if (option == 3){
                         System.out.println("---------------------------------");
                         break;
                     }
+
                     else{
                         System.out.println("ERROR! Please enter the an option from the menu.\n---------------------------------");
+                        break;
                     }
-                    
+
+                    System.out.print("Enter Hospital ID: ");
+                    int hospitalID = sc.nextInt();
+                    LinkedList <Integer> checkArr = Slot.displaySlots(hospitalID, Citizen.checkID(uID), uID, option, vaccineName);
+                    if (checkArr.size() == 0){
+                        break;
+                    }
+                    System.out.print("Choose Slot: ");
+                    option = sc.nextInt();
+                    Citizen.bookSlot(uID, option, checkArr);
                     break;
 
                 case 6:
@@ -147,6 +158,11 @@ public class Cowin {
                     break;
 
                 case 7:
+
+                    System.out.print("Enter Patient ID: ");
+                    long pID = sc.nextLong();
+
+                    Citizen.vacStatus(pID);
                     
                     break;
             

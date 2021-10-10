@@ -19,7 +19,7 @@ public class Cowin {
             Scanner sc = new Scanner(System.in);
 
             switch (choice) {
-                
+
                 case 1:
                     System.out.print("Vaccine Name: ");
                     String vacName = sc.nextLine();
@@ -62,7 +62,7 @@ public class Cowin {
                 case 4:     
                 //In this case, it is a NECESSITY for the user to know
                 //whether the hospital exists or not AND if the vaccines exist or not.
-                //Otherwise, they may go into a loop, which is laborious to get out of.
+                //Otherwise, they may go into a LOOP, which is laborious to get out of.
 
                 //Thus, I am calling some methods from Hospital and Vaccine directly from the main function.
                 //This may compromise on the encapsulation a bit. But it is necessary, and there is no work around.
@@ -71,7 +71,6 @@ public class Cowin {
                     int enteredID = sc.nextInt();
                     Hospital hosp = Hospital.checkHospID(enteredID);
                     if(hosp == null){
-                        System.out.println("ERROR! Hospital ID is not present in the database."+"\n---------------------------------");
                         break;
                     }
 
@@ -92,7 +91,6 @@ public class Cowin {
                             Slot.createSlots(enteredID, dayNum, quant, vacChoice, hosp);
                         }
                         else{
-                            System.out.println("ERROR! There are no Vaccines to choose from.");
                             break;
                         }
 
@@ -103,6 +101,39 @@ public class Cowin {
                     break;
                 
                 case 5:
+
+                    System.out.print("Enter patient Unique ID: ");
+                    long uID = sc.nextLong();
+                    
+                    System.out.print("1. Search by area\n2. Search by Vaccine\n3. Exit\nEnter option: ");
+                    int option = sc.nextInt();
+
+                    if (option == 1){
+                        System.out.print("Enter PinCode: ");
+                        int pincode = sc.nextInt();
+                        if (!Hospital.displayHospitals(pincode)){
+                            break;
+                        }
+                        System.out.print("Enter Hospital ID: ");
+                        int hospID = sc.nextInt();
+                        LinkedList <Integer> checkArr = Slot.displaySlots(hospID, Citizen.checkID(uID), uID);
+                        if (checkArr.size() == 0){
+                            break;
+                        }
+                        System.out.print("Choose Slot: ");
+                        option = sc.nextInt();
+                        Citizen.bookSlot(uID, option, checkArr);
+                    }
+                    else if(option == 2){
+                        
+                    }
+                    else if (option == 3){
+                        System.out.println("---------------------------------");
+                        break;
+                    }
+                    else{
+                        System.out.println("ERROR! Please enter the an option from the menu.\n---------------------------------");
+                    }
                     
                     break;
 

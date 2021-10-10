@@ -18,6 +18,52 @@ public class Slot {
         slots = new LinkedList<Slot>();
     }
 
+    public static LinkedList <Integer> displaySlots(int hospID, boolean flag, long uID){
+        LinkedList <Integer> countArr = new LinkedList<Integer>();
+
+        if (!flag){
+            System.out.println("ERROR! Your Unique ID does not exist!\n---------------------------------");
+            return countArr;
+        }
+
+        Hospital hosp = Hospital.getHospital(hospID);
+        if(hosp == null){
+            System.out.println("ERROR! You have entered an incorrect Hospital ID.\n---------------------------------");
+            return countArr;
+        }
+
+        Vaccine vac = Citizen.getVaccine(uID);
+
+        int count = 0;
+        for (Slot curSlot : slots){
+            if (curSlot._hosp == hosp && vac == null || curSlot._hosp == hosp && curSlot._vac == vac){
+                countArr.add(count);
+                System.out.println(count+"-> Day: "+curSlot._dayNum+" Available Qty: "+curSlot._quant+" Vaccine: "+curSlot._vac.getName());
+            }
+            count++;
+        }
+        if (countArr.size() == 0){
+            System.out.println("Sorry! There weren't any slots available.\n---------------------------------");
+        }
+        return countArr;
+    }
+
+    public int getDayNum(){
+        return this._dayNum;
+    }
+
+    public void quantNegate(){
+        this._quant -= 1;
+    }
+
+    public static Slot getSlot(int option, LinkedList <Integer> checkArr){
+        return slots.get(option);
+    }
+
+    public Vaccine getVaccine(){
+        return this._vac;
+    }
+
     public static void createSlots(int enteredID, int dayNum, int quant, int vacChoice, Hospital hosp){
 
         if(dayNum < 1){
@@ -44,7 +90,7 @@ public class Slot {
             }
         }
         
-        String vacName = Vaccine.getName(vac);
+        String vacName = vac.getName();
 
         Slot s = new Slot(hosp, dayNum, quant, vac);
         slots.add(s);
@@ -61,7 +107,7 @@ public class Slot {
         }
         for (Slot curSlot : slots){
             if (hosp == curSlot._hosp){
-                System.out.println("Day: "+curSlot._dayNum+" Vaccine: "+Vaccine.getName(curSlot._vac)+" Available Qty: "+curSlot._quant);
+                System.out.println("Day: "+curSlot._dayNum+" Vaccine: "+curSlot._vac.getName()+" Available Qty: "+curSlot._quant);
             }
         }
         System.out.println("---------------------------------");

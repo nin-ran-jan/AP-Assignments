@@ -29,8 +29,16 @@ public class Vaccine {
         }
     }
 
-    public static String getName(Vaccine vac){
-        return vac._name;
+    public String getName(){
+        return this._name;
+    }
+
+    public int getDoseNumber(){
+        return this._doseNumber;
+    }
+
+    public int getDoseGap(){
+        return this._doseGap;
     }
 
     public static void addVaccine(String name, int doseNumber, int doseGap){
@@ -48,7 +56,7 @@ public class Vaccine {
             return;
         }
 
-        if (doseNumber > 1 && doseGap < 1){ //
+        if (doseNumber > 1 && doseGap < 1){
             System.out.println("ERROR! Need to have positive value for gap between doses."+"\n---------------------------------");
             return;
         }
@@ -63,6 +71,7 @@ public class Vaccine {
         int count = 0;
 
         if (vaccines.size() == 0){
+            System.out.println("ERROR! There are no Vaccines to choose from.");
             return false;
         }
 

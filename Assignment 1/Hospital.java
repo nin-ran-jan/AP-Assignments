@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.Scanner;
 
 public class Hospital {
 
@@ -29,6 +28,24 @@ public class Hospital {
         return null;
     }
 
+    public static boolean displayHospitals(int pincode){
+        if (hospitals.size() == 0){
+            System.out.println("ERROR! Register a hospital first.\n---------------------------------");
+            return false;
+        }
+        boolean flag = false;
+        for (Hospital curHosp : hospitals){
+            if (curHosp._pinCode == pincode){
+                flag = true;
+                System.out.println(curHosp._uniqueID+" "+curHosp._name);
+            }
+        }
+        if (!flag){
+            System.out.println("Sorry! There aren't any hospitals in the area.\n---------------------------------");
+        }
+        return flag;
+    }
+
     public static void register(String name, int pinCode){
         
         if(pinCode < 100000 || pinCode > 999999){
@@ -54,6 +71,7 @@ public class Hospital {
                 return curHosp;
             }
         }
+        System.out.println("ERROR! Hospital ID is not present in the database."+"\n---------------------------------");
         return null;
     }
 }

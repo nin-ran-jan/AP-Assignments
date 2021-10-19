@@ -9,6 +9,10 @@ public class Quiz implements Assessments{
         this._closed = false;
     }
 
+    public String getQuestion(){
+        return this._qq;
+    }
+
     @Override
     public void view(int index){
         this.viewQuiz(index);
@@ -22,6 +26,11 @@ public class Quiz implements Assessments{
     @Override
     public void close(){
         this._closed = true;
+    }
+
+    @Override
+    public int getMaxMarks(){
+        return this._quizMaxMarks;
     }
 
     private void viewQuiz(int index){

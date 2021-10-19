@@ -1,4 +1,4 @@
-public class Instructor {
+public class Instructor implements UserID{
 
     private String _instructorName;
     
@@ -6,6 +6,7 @@ public class Instructor {
         this._instructorName = instructorName;
     }
 
+    @Override
     public String getName(){
         return this._instructorName;
     }

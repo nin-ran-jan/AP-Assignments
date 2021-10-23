@@ -8,7 +8,7 @@ public class Game {
 
     private static void startGame(){
 
-        Floor floor = new Floor();
+        EmptyFloor floor = new EmptyFloor();
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the player name and hit enter");

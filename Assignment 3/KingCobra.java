@@ -14,7 +14,7 @@ public class KingCobra extends Snake{
     @Override
     protected void updateDetails(Player p1){
         p1.setPoints(this._kingCobraFloorPoints);
-        this.printDetails(p1, this._kingCobraFloorClassName);
+        super.printDetails(p1, this._kingCobraFloorClassName);
         p1.setFloorNum(this._kingCobraFloorSetter);
     }
     

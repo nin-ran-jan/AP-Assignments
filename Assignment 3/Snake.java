@@ -14,7 +14,7 @@ public class Snake extends Floor{
     @Override
     protected void updateDetails(Player p1){
         p1.setPoints(this._snakeFloorPoints);
-        this.printDetails(p1, this._snakeFloorClassName);
+        super.printDetails(p1, this._snakeFloorClassName);
         p1.setFloorNum(this._snakeFloorSetter);
     }
     

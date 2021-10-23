@@ -14,7 +14,7 @@ public class Ladder extends Floor{
     @Override
     protected void updateDetails(Player p1){
         p1.setPoints(_ladderFloorPoints);
-        this.printDetails(p1, _ladderFloorClassName);
+        super.printDetails(p1, _ladderFloorClassName);
         p1.setFloorNum(_ladderFloorSetter);
     }
     

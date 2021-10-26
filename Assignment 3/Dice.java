@@ -2,28 +2,26 @@ import java.util.Random;
 
 public class Dice {
 
-    private static final int NUMFACES = 2;
-    private static int _faceValue;
+    private final int NUMFACES = 2;
+    private int _faceValue;
 
-    {
-        _faceValue = 0;
+    public Dice(){
+        this._faceValue = 0;
     }
 
-    public Dice(){}
-
-    public static void roll() {
+    public void roll() {
         Random rand = new Random();
-        setFaceValue(1 + rand.nextInt(NUMFACES));
+        setFaceValue(1 + rand.nextInt(this.NUMFACES));
     }
 
-    private static void setFaceValue (int value) {
-        if (value <= NUMFACES){
-            _faceValue = value;
+    private void setFaceValue (int value) {
+        if (value <= this.NUMFACES){
+            this._faceValue = value;
         }
     }
 
-    public static int getFaceValue() {
-        return _faceValue;
+    public int getFaceValue() {
+        return this._faceValue;
     }
     
 }

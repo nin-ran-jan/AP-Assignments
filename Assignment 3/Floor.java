@@ -1,11 +1,15 @@
-public abstract class Floor {
+public class Floor {
 
-    protected abstract void updateDetails(Player p1);
+    protected int _FloorPoints;
+    protected String _FloorClassName;
+    protected int _FloorSetter;
 
-    protected void printDetails(Player p1, String className){
-        System.out.println("Player position Floor-" + p1.getFloor());
-        System.out.println(p1.getName() + " has reached a" + className +" Floor");
-        System.out.println("Total points " + p1.getPoints());
+    protected void updateDetails(Player p){
+        p.setPoints(this._FloorPoints);
+        System.out.println("Player position Floor-" + p.getFloor());
+        System.out.println(p.getName() + " has reached a" + this._FloorClassName +" Floor");
+        System.out.println("Total points " + p.getPoints());
+        p.setFloorNum(this._FloorSetter);
     }
-
+    
 }

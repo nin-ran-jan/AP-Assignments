@@ -1,80 +1,143 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
 
+    private ArrayList<Player> players;
+    private Dice _d;
+
     public Game(){
-        startGame();
+        this.players = new ArrayList<Player>();
+        this._d = new Dice();
+        this.startGame();
     }
 
-    private static void startGame(){
+    private void startGame(){
 
-        EmptyFloor floor = new EmptyFloor();
-
+        EmptyFloor emptyFloor = new EmptyFloor();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the player name and hit enter");
-        String playerName = sc.nextLine();
-        Player p1 = new Player(playerName);
+
+        System.out.print("Enter the number of players you want in the game: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        for (int i = 0; i < n; i++){
+            System.out.println("Enter the player name and hit enter");
+            String playerName = sc.nextLine();
+            Player p = new Player(playerName);
+            this.players.add(p);
+        }
 
         System.out.println("The game setup is ready\n");
-        boolean flag = false;
+
+        int numPlayerCompleted = 0;
 
         while (true){
 
-            System.out.print("Hit enter to roll the dice");
-            sc.nextLine();
+            for (Player p : this.players){
 
-            Dice.roll();
-            int diceReading = Dice.getFaceValue();
-            System.out.println("Dice gave " + diceReading);
+                if (!p.getCompletionStatus()){
+                    System.out.println(p.getName() + " it's your turn!");
+                    System.out.print("Hit enter to roll the dice");
+                    sc.nextLine();
 
-            p1.setFloorNum(diceReading);
-            int curFloor = p1.getFloor();
+                    this._d.roll();
+                    int diceReading = this._d.getFaceValue();
+                    //int diceReading = sc.nextInt();
+                    System.out.println("Dice gave " + diceReading);
 
-            //System.out.println(p1.getFloor() + " " + p1.getPoints() + " " + curFloor);
+                    p.setFloorNum(diceReading);
+                    int curFloor = p.getFloor();
 
-            if (!flag && diceReading != 1){
-                System.out.println("Game cannot start until you get 1");
-                p1.setFloorNum(-diceReading);
+                    if (!p.getFlag() && diceReading != 1){
+                        System.out.println("Game cannot start until you get 1");
+                        p.setFloorNum(-diceReading);
+                        System.out.println();
+                        continue;
+                    }
+
+                    else if(!p.getFlag() && diceReading == 1){
+                        p.setFlag();
+                    }
+
+                    else if (curFloor > 20){
+                        System.out.println("Player cannot move");
+                        p.setFloorNum(-diceReading);
+                        System.out.println();
+                        continue;
+                    }
+
+                    else if (curFloor == 2){
+                        Elevator elevator = new Elevator();
+                        elevator.updateDetails(p);
+                    }
+
+                    else if (curFloor == 5 || curFloor == 16){
+                        Snake snake = new Snake();
+                        snake.updateDetails(p);
+                    }
+
+                    else if (curFloor == 8 || curFloor == 14){
+                        Ladder ladder = new Ladder();
+                        ladder.updateDetails(p);
+                    }
+
+                    else if (curFloor == 11){
+                        KingCobra kingCobra = new KingCobra();
+                        kingCobra.updateDetails(p);
+                    }
+
+                    else if(curFloor == 19){
+                        Nagini nagini = new Nagini();
+                        nagini.updateDetails(p);
+                    }
+
+                    emptyFloor.updateDetails(p);
+                    System.out.println();
+
+                    if (curFloor == 20){
+                        System.out.println("You're done!\n" + p.getName() + " accumulated " + p.getPoints() + " points\n---------------------------------------------------------------");
+                        p.gameCompleted();
+                        numPlayerCompleted++;
+                    }
+                }
+
+            }
+
+            
+            if (numPlayerCompleted == this.players.size()){
+                System.out.println("Game over!");
+
+                int maxScore = Integer.MIN_VALUE;
+                String winner = "";
+                boolean flag = false;
+
+                for (Player p : players){
+
+                    if (p.getPoints() > maxScore){
+                        winner = p.getName();
+                        maxScore = p.getPoints();
+                        flag = false;
+                    }
+
+                    else if (p.getPoints() == maxScore){
+                        flag = true;
+                    }
+
+                    System.out.println(p.getName() + " accumulated " + p.getPoints() + " points");
+                }
+
                 System.out.println();
-                continue;
-            }
 
-            else if (!flag && diceReading == 1){
-                flag = true;
-            }
+                if (!flag){
+                    System.out.println("The winner is " + winner + "! Congratulations! You got a score of " + maxScore + ".");
+                }
+                else{
+                    System.out.println("Looks like there has been a tie at " + maxScore + " points! No one wins.");
+                }
 
-            else if (curFloor > 13){
-                System.out.println("Player cannot move");
-                p1.setFloorNum(-diceReading);
-                System.out.println();
-                continue;
-            }
+                System.out.println("---------------------------------------------------------------");
 
-            else if (curFloor == 2){
-                Elevator elevator = new Elevator();
-                elevator.updateDetails(p1);
-            }
-
-            else if (curFloor == 5){
-                Snake snake = new Snake();
-                snake.updateDetails(p1);
-            }
-
-            else if (curFloor == 8){
-                Ladder ladder = new Ladder();
-                ladder.updateDetails(p1);
-            }
-
-            else if (curFloor == 11){
-                KingCobra kingCobra = new KingCobra();
-                kingCobra.updateDetails(p1);
-            }
-
-            floor.updateDetails(p1);
-            System.out.println();
-
-            if (curFloor == 13){
-                System.out.println("Game over\n" + p1.getName() + " accumulated " + p1.getPoints() + " points\n---------------------------------------------------------------");
                 break;
             }
 

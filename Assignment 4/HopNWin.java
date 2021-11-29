@@ -138,6 +138,7 @@ public class HopNWin {
         }
         System.out.println("Game Over\nSoft toys won by you are:");
         p.printSoftToys();
+        sc.close();
     
     }
 

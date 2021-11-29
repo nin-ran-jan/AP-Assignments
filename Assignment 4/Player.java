@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Player {
 
@@ -48,5 +47,5 @@ public class Player {
         this.bucket.add(st);
         this.numberOfToys++;
     }
-    
+
 }

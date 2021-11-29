@@ -30,12 +30,13 @@ public class Player {
             }
         }
     }
+
+    public int getChancesLeft(){
+        return this.numberOfChances;
+    }
     
     public int hop(){
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Hit enter for hop number " + (6 - numberOfChances) + " ");
         numberOfChances--;
-        sc.nextLine();
         Random r = new Random();
         int jumpPosition = r.nextInt(22) + 1; //tiles 21 and 22 are mud puddles
         // int jumpPosition = sc.nextInt();
@@ -47,5 +48,5 @@ public class Player {
         this.bucket.add(st);
         this.numberOfToys++;
     }
-
+    
 }

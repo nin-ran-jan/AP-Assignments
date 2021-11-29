@@ -43,6 +43,8 @@ public class HopNWin {
         sc.nextLine();
         System.out.println("Game is ready");
         while(p.getNoOfJumps() != 0){
+            System.out.print("Hit enter for hop number " + (6 - p.getChancesLeft()) + " ");
+            sc.nextLine();
             int pos = p.hop();
             TileCarpet curTile = null;
             try{
@@ -83,28 +85,16 @@ public class HopNWin {
                         System.out.println("Try again!");
                     }
                 } while (!isInputCorrect);
-                if(output.equals("integer")){ //Will immediately get initialized
+                if(output.equals("integer")){ 
+                    boolean flag = false;
+                    int numA, numB, answer;
+                    answer = -1234567890; //Junk value that will be changed according to code logic
                     isInputCorrect = false;
-                    boolean isRandomNumberCorrect = false;
-                    int numA, numB, answer, calculatedAnswer;
-                    answer = -1234567890;
-                    calculatedAnswer = -1234567890;
-                    //The above 2 integers are stored with this junk value. Their value will change through the course of the program.
                     do {
                         numA = this.generateRandomNumber();
                         numB = this.generateRandomNumber();
-                        // System.out.println("Enter");
-                        // numA = sc.nextInt();
-                        // numB = sc.nextInt();
-                        // sc.nextLine();
-                        try{
-                            calculatedAnswer = numA/numB;
-                            isRandomNumberCorrect = true;
-                        }
-                        catch(ArithmeticException ae){
-                            //Try again
-                        }
-                    } while(!isRandomNumberCorrect);
+                        flag = this.intCalc.checkPossible(numA, numB);
+                    } while(!flag);
                     do {
                         System.out.println("Calculate the result of " + numA + " divided by " + numB);
                         try{
@@ -116,7 +106,7 @@ public class HopNWin {
                         }
                         sc.nextLine();
                     } while(!isInputCorrect);
-                    if(this.intCalc.check(calculatedAnswer, answer)){
+                    if(this.intCalc.solve(numA, numB, answer)){
                         SoftToy curSoftToy = null;
                         do {
                             curSoftToy = curTile.clone();
@@ -126,13 +116,16 @@ public class HopNWin {
                     }
                 }
                 else if(output.equals("string")){
-                    String strA, strB, answer, calculatedAnswer;
-                    strA = this.generateRandomString();
-                    strB = this.generateRandomString();
-                    calculatedAnswer = strA + strB;
+                    String strA, strB, answer;
+                    boolean flag = false;
+                    do{
+                        strA = this.generateRandomString();
+                        strB = this.generateRandomString();
+                        flag = this.strCalc.checkPossible(strA, strB);
+                    } while(!flag);
                     System.out.println("Calculate the concatenation of strings " + strA + " and " + strB);
                     answer = sc.nextLine();
-                    if(this.strCalc.check(calculatedAnswer, answer)){
+                    if(this.strCalc.solve(strA, strB, answer)){
                         SoftToy curSoftToy = null;
                         do {
                             curSoftToy = curTile.clone();
@@ -145,7 +138,7 @@ public class HopNWin {
         }
         System.out.println("Game Over\nSoft toys won by you are:");
         p.printSoftToys();
-
+    
     }
 
     private int generateRandomNumber(){
@@ -164,9 +157,5 @@ public class HopNWin {
             retString += (char) temp;
         }
         return retString;
-    }
-
-    private void listDetails(){
-
     }
 }

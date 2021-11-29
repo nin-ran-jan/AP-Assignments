@@ -9,4 +9,5 @@ public class TileCarpet {
     public SoftToy clone() throws CloneNotSupportedException{
         return st.clone();
     }
+    
 }

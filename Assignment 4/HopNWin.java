@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -83,9 +82,6 @@ public class HopNWin {
                     catch(InvalidTypeException ite){
                         System.out.println("Try again!");
                     }
-                    catch(IllegalArgumentException iae){
-                        System.out.println("ERROR!"); //This will never happen
-                    }
                 } while (!isInputCorrect);
                 if(output.equals("integer")){ //Will immediately get initialized
                     isInputCorrect = false;
@@ -148,7 +144,7 @@ public class HopNWin {
             }
         }
         System.out.println("Game Over\nSoft toys won by you are:");
-        // for()
+        p.printSoftToys();
 
     }
 
